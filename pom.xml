@@ -20,16 +20,21 @@
         </plugins>
     </build>
 
+    <properties>
+        <telegram.bot.version>4.4.0</telegram.bot.version>
+    </properties>
+
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.telegram/telegrambots -->
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>4.4.0</version>
+            <version>${telegram.bot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-abilities</artifactId>
-            <version>4.4.0</version>
+            <version>${telegram.bot.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
