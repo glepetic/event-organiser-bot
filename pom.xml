@@ -39,7 +39,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>${telegram.bot.version}</version>
+            <version>4.3.1</version>
         </dependency>
         <dependency>
             <groupId>org.telegram</groupId>
