@@ -21,6 +21,11 @@
                 <groupId>com.heroku.sdk</groupId>
                 <artifactId>heroku-maven-plugin</artifactId>
                 <version>2.0.8</version>
+                <configuration>
+                    <processTypes>
+                        <worker>java $JAVA_OPTS -cp target/classes:target/dependency/* BotApp</worker>
+                    </processTypes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
