@@ -23,7 +23,7 @@
                 <version>2.0.8</version>
                 <configuration>
                     <processTypes>
-                        <worker>java $JAVA_OPTS -cp target/classes:target/dependency/* BotApp</worker>
+                        <worker>java -jar target/telegram-bot-1.0.0.jar</worker>
                     </processTypes>
                 </configuration>
             </plugin>
