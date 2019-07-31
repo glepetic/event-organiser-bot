@@ -31,7 +31,7 @@
     </build>
 
     <properties>
-        <telegram.bot.version>4.4.0</telegram.bot.version>
+        <telegram.bot.version>4.3.1</telegram.bot.version>
     </properties>
 
     <dependencies>
@@ -39,13 +39,15 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>4.3.1</version>
+            <version>${telegram.bot.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.telegram/telegrambots-abilities -->
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-abilities</artifactId>
             <version>${telegram.bot.version}</version>
         </dependency>
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
