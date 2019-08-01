@@ -73,7 +73,7 @@
                     <mainClass>org.lepetic.telegrambot.BotApp</mainClass>
                     <arguments>
                         <argument>-jar</argument>
-                        <argument>${app.stage.artifact}</argument>
+                        <argument>${app.stage.stagingDirectory}/${app.artifact.name}</argument>
                     </arguments>
                 </configuration>
             </plugin>
