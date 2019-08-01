@@ -7,6 +7,13 @@
     <groupId>org.lepetic</groupId>
     <artifactId>telegram-bot</artifactId>
     <version>1.0.0</version>
+
+    <properties>
+        <telegram.bot.version>4.3.1</telegram.bot.version>
+        <app.artifact.name>telegram-bot-1.0.0-jar-with-dependencies.jar</app.artifact.name>
+        <app.stage.artifact>${project.build.directory}/${app.artifact.name}</app.stage.artifact>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -22,17 +29,56 @@
                 <artifactId>heroku-maven-plugin</artifactId>
                 <version>2.0.8</version>
                 <configuration>
+                    <appName>my-atr-bot</appName>
                     <processTypes>
-                        <worker>java -jar target/telegram-bot-1.0.0.jar</worker>
+                        <bot>java -jar ./target/${app.artifact.name}</bot>
                     </processTypes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <!-- get all project dependencies -->
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <!-- MainClass in mainfest make a executable jar -->
+                    <archive>
+                        <manifest>
+                            <mainClass>org.lepetic.telegrambot.BotApp</mainClass>
+                        </manifest>
+                    </archive>
+
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <!-- bind to the packaging phase -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <mainClass>application.Server</mainClass>
+                    <arguments>
+                        <argument>-jar</argument>
+                        <argument>${app.stage.artifact}</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
-
-    <properties>
-        <telegram.bot.version>4.3.1</telegram.bot.version>
-    </properties>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.telegram/telegrambots -->

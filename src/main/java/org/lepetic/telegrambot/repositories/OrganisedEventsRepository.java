@@ -2,8 +2,8 @@ package org.lepetic.telegrambot.repositories;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import org.lepetic.telegrambot.entities.OrganisedEvent;
 import org.lepetic.telegrambot.daos.OrganisedEventDAO;
+import org.lepetic.telegrambot.entities.OrganisedEvent;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.slf4j.Logger;

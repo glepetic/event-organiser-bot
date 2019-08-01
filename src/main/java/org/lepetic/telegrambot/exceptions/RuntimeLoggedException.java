@@ -10,7 +10,7 @@ public class RuntimeLoggedException extends RuntimeException {
 
     public RuntimeLoggedException(String msg){
         super(msg);
-        LOGGER.error("Exception ocurred: ", this);
+        LOGGER.error("Exception occurred: ", this);
     }
 
 }

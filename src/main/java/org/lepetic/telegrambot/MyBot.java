@@ -45,12 +45,12 @@ public class MyBot extends AbilityBot {
                 ctx -> silent.send("Hello world!", ctx.chatId()));
     }
 
-    public Ability sayFuisteAgregadoALaLista() {
+    public Ability addUserToEvent() {
         return buildAbility("add", "adds you to the group's current event", ALL, PUBLIC,
                 ctx -> {
                     EventSubscription eventSubscription = new EventSubscription();
                     User user = ctx.user();
-                    String nickname = Optional.ofNullable(user.getUserName()).orElse(user.getFirstName() + " " + Optional.ofNullable(user.getLastName()).orElse(""));
+                    String nickname = Optional.ofNullable(user.getUserName()).orElseGet(() -> user.getFirstName() + " " + Optional.ofNullable(user.getLastName()).orElseGet(() -> ""));
                     eventSubscription.addToOrganisedEvent(ctx.chatId(), nickname);
                     silent.send(nickname + " fuiste agregado a la lista", ctx.chatId());
                 });
