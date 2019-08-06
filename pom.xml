@@ -10,7 +10,7 @@
 
     <properties>
         <telegram.bot.version>4.3.1</telegram.bot.version>
-        <app.artifact.name>telegram-bot-1.0.0-jar-with-dependencies.jar</app.artifact.name>
+        <app.artifact.name>telegram-bot-${version}-jar-with-dependencies.jar</app.artifact.name>
         <app.stage.artifact>${project.build.directory}/${app.artifact.name}</app.stage.artifact>
     </properties>
 

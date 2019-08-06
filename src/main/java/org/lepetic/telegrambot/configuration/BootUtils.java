@@ -10,7 +10,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class BootUtils {
 
     private static final Logger LOGGER = getLogger(BootUtils.class);
-    private static final String CONFIGURATION_FILE = "configuration.json";
 
     private BootUtils(){}
 

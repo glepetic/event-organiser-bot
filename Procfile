@@ -1,1 +1,0 @@
-bot: java -jar ./target/telegram-bot-1.0.0-jar-with-dependencies.jar
