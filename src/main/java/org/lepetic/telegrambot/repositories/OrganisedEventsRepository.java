@@ -6,9 +6,11 @@ import org.lepetic.telegrambot.daos.OrganisedEventDAO;
 import org.lepetic.telegrambot.entities.OrganisedEvent;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.Query;
 import org.slf4j.Logger;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -24,7 +26,7 @@ public class OrganisedEventsRepository {
     private static OrganisedEventsRepository instance = new OrganisedEventsRepository();
 
     private Map<String, OrganisedEvent> organisedEvents;
-    private Datastore organisedEventsDatastore;
+//    private Datastore organisedEventsDatastore;
     private OrganisedEventDAO organisedEventDAO;
 
     private OrganisedEventsRepository() {
@@ -36,8 +38,8 @@ public class OrganisedEventsRepository {
         MongoClient mongoClient = new MongoClient(new MongoClientURI(MONGO_URI));
 
         Morphia morphia = new Morphia();
-        organisedEventsDatastore = morphia.createDatastore(mongoClient, DB_NAME);
-        organisedEventsDatastore.ensureIndexes();
+//        organisedEventsDatastore = morphia.createDatastore(mongoClient, DB_NAME);
+//        organisedEventsDatastore.ensureIndexes();
 
         organisedEventDAO = new OrganisedEventDAO(mongoClient, morphia, DB_NAME);
 
@@ -49,7 +51,15 @@ public class OrganisedEventsRepository {
         return instance;
     }
 
+    public Optional<OrganisedEvent> getOrganisedEvent(Long chatId){
+        Query<OrganisedEvent> query = organisedEventDAO.createQuery();
+        query.filter("chatId ==", chatId);
+        return Optional.ofNullable(organisedEventDAO.findOne(query));
+    }
 
+    public void updateOrganisedEvent(Long chatId, OrganisedEvent organisedEvent) {
+//        organisedEventDAO
+    }
 }
 
 

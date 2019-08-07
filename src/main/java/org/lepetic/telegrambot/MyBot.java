@@ -1,6 +1,9 @@
 package org.lepetic.telegrambot;
 
 import org.lepetic.telegrambot.abilities.EventSubscription;
+import org.lepetic.telegrambot.entities.OrganisedEvent;
+import org.lepetic.telegrambot.exceptions.NoEventRegisteredException;
+import org.lepetic.telegrambot.utils.MessageBuilder;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
 import org.telegram.abilitybots.api.objects.Locality;
@@ -51,8 +54,15 @@ public class MyBot extends AbilityBot {
                     EventSubscription eventSubscription = new EventSubscription();
                     User user = ctx.user();
                     String nickname = Optional.ofNullable(user.getUserName()).orElseGet(() -> user.getFirstName() + " " + Optional.ofNullable(user.getLastName()).orElseGet(() -> ""));
-                    eventSubscription.addToOrganisedEvent(ctx.chatId(), nickname);
-                    silent.send(nickname + " fuiste agregado a la lista", ctx.chatId());
+                    OrganisedEvent organisedEvent;
+                    try {
+                        organisedEvent = eventSubscription.addToOrganisedEvent(ctx.chatId(), nickname, user.getId());
+                        String message = MessageBuilder.buildParticipantsMessage(organisedEvent.getEventName(), organisedEvent.participants());
+                        silent.send(message, ctx.chatId());
+                    }catch(NoEventRegisteredException e){
+                        silent.send("No hay evento actual para este grupo. Si sos admin, crealo con /event",
+                                ctx.chatId());
+                    }
                 });
     }
 

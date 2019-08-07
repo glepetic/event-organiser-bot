@@ -1,22 +1,20 @@
 package org.lepetic.telegrambot.abilities;
 
-import org.lepetic.telegrambot.repositories.OrganisedEventsRepository;
-import org.slf4j.Logger;
+import org.lepetic.telegrambot.entities.OrganisedEvent;
+import org.lepetic.telegrambot.services.OrganisedEventsService;
 
-import static org.slf4j.LoggerFactory.getLogger;
+import java.util.List;
 
 public class EventSubscription {
 
-    private static final Logger LOGGER = getLogger(EventSubscription.class);
-
-    private OrganisedEventsRepository organisedEventsRepository;
+    private OrganisedEventsService organisedEventsService;
 
     public EventSubscription(){
-        this.organisedEventsRepository = OrganisedEventsRepository.getInstance();
+        this.organisedEventsService = OrganisedEventsService.getInstance();
     }
 
-    public void addToOrganisedEvent(Long chatId, String name){
-        LOGGER.info("Adding new participant...");
+    public OrganisedEvent addToOrganisedEvent(Long chatId, String userName, Integer userId){
+        return organisedEventsService.updateAndGetOrganisedEventMembers(chatId, userName, userId);
     }
 
 }
