@@ -5,18 +5,21 @@ fi
 
 echo "Are you sure you want to use version $1 ? [y/n]"
 
-read -r answer
-
-if ${answer^^} == 'N'; then
-  echo 'Exiting...'
-  exit 0
-fi
+while :; do
+  read -r answer
+  if [ "${answer^^}" == "N" ]; then
+    echo 'Exiting...'
+    exit 0
+  elif [ "${answer^^}" == "Y" ]; then
+    break
+  fi
+done
 
 echo 'Changing to master branch'
 git checkout master
 echo 'Starting deploy...'
 mvn clean versions:set heroku:deploy -DnewVersion="$1"
-if $? -ne 0; then
+if [ $? -ne 0 ]; then
   echo 'Reverting to previous version'
   mvn versions:revert
 else
