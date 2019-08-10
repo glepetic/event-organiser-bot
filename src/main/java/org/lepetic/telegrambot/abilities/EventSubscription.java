@@ -3,8 +3,6 @@ package org.lepetic.telegrambot.abilities;
 import org.lepetic.telegrambot.entities.OrganisedEvent;
 import org.lepetic.telegrambot.services.OrganisedEventsService;
 
-import java.util.List;
-
 public class EventSubscription {
 
     private OrganisedEventsService organisedEventsService;

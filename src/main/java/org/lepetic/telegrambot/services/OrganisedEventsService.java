@@ -27,12 +27,10 @@ public class OrganisedEventsService {
     }
 
     public OrganisedEvent updateAndGetOrganisedEventMembers(Long chatId, String userName, Integer userId){
-        Optional<OrganisedEvent> optionalEvent = organisedEventsRepository.getOrganisedEvent(chatId);
-        OrganisedEvent organisedEvent =
-                optionalEvent.orElseThrow(() -> new NoEventRegisteredException("Inexistent event of: " + chatId));
+        OrganisedEvent organisedEvent = organisedEventsRepository.getOrganisedEvent(chatId);
         organisedEvent.addUser(new GroupMember(userId, userName));
-        organisedEventsRepository.updateOrganisedEvent(chatId, organisedEvent);
-        return null;
+        organisedEventsRepository.updateOrganisedEvent(chatId, organisedEvent.getGroupMembers());
+        return organisedEvent;
     }
 
 }

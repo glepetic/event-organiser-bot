@@ -3,12 +3,16 @@ package org.lepetic.telegrambot.repositories;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import org.lepetic.telegrambot.daos.OrganisedEventDAO;
+import org.lepetic.telegrambot.entities.GroupMember;
 import org.lepetic.telegrambot.entities.OrganisedEvent;
+import org.lepetic.telegrambot.exceptions.NoEventRegisteredException;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 import org.slf4j.Logger;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,8 +29,8 @@ public class OrganisedEventsRepository {
     );
     private static OrganisedEventsRepository instance = new OrganisedEventsRepository();
 
-    private Map<String, OrganisedEvent> organisedEvents;
-//    private Datastore organisedEventsDatastore;
+    private Map<Long, OrganisedEvent> organisedEvents;
+    //    private Datastore organisedEventsDatastore;
     private OrganisedEventDAO organisedEventDAO;
 
     private OrganisedEventsRepository() {
@@ -51,14 +55,31 @@ public class OrganisedEventsRepository {
         return instance;
     }
 
-    public Optional<OrganisedEvent> getOrganisedEvent(Long chatId){
+    private Query<OrganisedEvent> queryOfOrganisedEventByChatId(Long chatId) {
         Query<OrganisedEvent> query = organisedEventDAO.createQuery();
         query.filter("chatId ==", chatId);
-        return Optional.ofNullable(organisedEventDAO.findOne(query));
+        return query;
     }
 
-    public void updateOrganisedEvent(Long chatId, OrganisedEvent organisedEvent) {
-//        organisedEventDAO
+    public OrganisedEvent getOrganisedEvent(Long chatId) {
+        OrganisedEvent organisedEvent = organisedEvents.get(chatId);
+        if (organisedEvent == null) {
+            Optional<OrganisedEvent> optionalEvent = getOrganisedEventFromDB(chatId);
+            organisedEvent =
+                    optionalEvent.orElseThrow(() -> new NoEventRegisteredException("Inexistent event of: " + chatId));
+            organisedEvents.put(organisedEvent.getChatId(), organisedEvent);
+        }
+        return organisedEvent;
+    }
+
+    private Optional<OrganisedEvent> getOrganisedEventFromDB(Long chatId) {
+        return Optional.ofNullable(organisedEventDAO.findOne(queryOfOrganisedEventByChatId(chatId)));
+    }
+
+    public void updateOrganisedEvent(Long chatId, List<GroupMember> participants) {
+        UpdateOperations<OrganisedEvent> updateOp =
+                organisedEventDAO.createUpdateOperations().set("groupMembers", participants);
+        organisedEventDAO.update(queryOfOrganisedEventByChatId(chatId), updateOp);
     }
 }
 
