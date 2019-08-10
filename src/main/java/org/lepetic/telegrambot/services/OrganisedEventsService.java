@@ -6,6 +6,8 @@ import org.lepetic.telegrambot.exceptions.NoEventRegisteredException;
 import org.lepetic.telegrambot.repositories.OrganisedEventsRepository;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -27,10 +29,20 @@ public class OrganisedEventsService {
     }
 
     public OrganisedEvent updateAndGetOrganisedEventMembers(Long chatId, String userName, Integer userId){
+        LOGGER.info("Retrieving organised event of {}", chatId);
         OrganisedEvent organisedEvent = organisedEventsRepository.getOrganisedEvent(chatId);
         organisedEvent.addUser(new GroupMember(userId, userName));
+        LOGGER.info("Updating event with new member: {}", userName);
         organisedEventsRepository.updateOrganisedEvent(chatId, organisedEvent.getGroupMembers());
         return organisedEvent;
+    }
+
+    public void createOrganisedEvent(Long chatId, String eventName) {
+        OrganisedEvent organisedEvent = new OrganisedEvent();
+        organisedEvent.setChatId(chatId);
+        organisedEvent.setEventName(eventName);
+        organisedEvent.setGroupMembers(new HashSet<>());
+        organisedEventsRepository.storeOrganisedEvent(organisedEvent);
     }
 
 }

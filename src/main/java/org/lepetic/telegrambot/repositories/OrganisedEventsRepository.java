@@ -12,9 +12,7 @@ import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.slf4j.Logger;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -29,7 +27,7 @@ public class OrganisedEventsRepository {
     );
     private static OrganisedEventsRepository instance = new OrganisedEventsRepository();
 
-    private Map<Long, OrganisedEvent> organisedEvents;
+    private Map<Long, OrganisedEvent> organisedEvents = new HashMap<>();
     //    private Datastore organisedEventsDatastore;
     private OrganisedEventDAO organisedEventDAO;
 
@@ -64,9 +62,11 @@ public class OrganisedEventsRepository {
     public OrganisedEvent getOrganisedEvent(Long chatId) {
         OrganisedEvent organisedEvent = organisedEvents.get(chatId);
         if (organisedEvent == null) {
+            LOGGER.info("Event {} not cached in memory", chatId);
             Optional<OrganisedEvent> optionalEvent = getOrganisedEventFromDB(chatId);
             organisedEvent =
                     optionalEvent.orElseThrow(() -> new NoEventRegisteredException("Inexistent event of: " + chatId));
+            LOGGER.info("Retrieved event {} from database", chatId);
             organisedEvents.put(organisedEvent.getChatId(), organisedEvent);
         }
         return organisedEvent;
@@ -76,10 +76,14 @@ public class OrganisedEventsRepository {
         return Optional.ofNullable(organisedEventDAO.findOne(queryOfOrganisedEventByChatId(chatId)));
     }
 
-    public void updateOrganisedEvent(Long chatId, List<GroupMember> participants) {
+    public void updateOrganisedEvent(Long chatId, Set<GroupMember> participants) {
         UpdateOperations<OrganisedEvent> updateOp =
                 organisedEventDAO.createUpdateOperations().set("groupMembers", participants);
         organisedEventDAO.update(queryOfOrganisedEventByChatId(chatId), updateOp);
+    }
+
+    public void storeOrganisedEvent(OrganisedEvent organisedEvent) {
+        organisedEventDAO.save(organisedEvent);
     }
 }
 

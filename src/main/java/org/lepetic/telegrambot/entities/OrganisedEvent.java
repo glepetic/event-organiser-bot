@@ -1,9 +1,12 @@
 package org.lepetic.telegrambot.entities;
 
 import org.bson.types.ObjectId;
+import org.lepetic.telegrambot.exceptions.MemberAlreadySubscribedException;
+import org.lepetic.telegrambot.exceptions.MemberIsNotSubscribedException;
 import org.mongodb.morphia.annotations.Id;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class OrganisedEvent {
@@ -13,10 +16,17 @@ public class OrganisedEvent {
 
     private Long chatId;
     private String eventName;
-    private List<GroupMember> groupMembers;
+    private Set<GroupMember> groupMembers;
 
     public void addUser(GroupMember groupMember){
+        if(groupMembers.contains(groupMember))
+            throw new MemberAlreadySubscribedException("The user " + groupMember.getName() + " is already subscribed to the event");
         this.groupMembers.add(groupMember);
+    }
+
+    public void removeUser(GroupMember groupMember) {
+        if(!groupMembers.contains(groupMember))
+            throw new MemberIsNotSubscribedException("The user " + groupMember.getName() + " is not subscribed");
     }
 
     public List<String> participants() {
@@ -47,11 +57,11 @@ public class OrganisedEvent {
         this.eventName = eventName;
     }
 
-    public List<GroupMember> getGroupMembers() {
+    public Set<GroupMember> getGroupMembers() {
         return groupMembers;
     }
 
-    public void setGroupMembers(List<GroupMember> groupMembers) {
+    public void setGroupMembers(Set<GroupMember> groupMembers) {
         this.groupMembers = groupMembers;
     }
 

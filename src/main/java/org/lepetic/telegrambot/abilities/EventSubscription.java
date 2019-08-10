@@ -7,11 +7,15 @@ public class EventSubscription {
 
     private OrganisedEventsService organisedEventsService;
 
-    public EventSubscription(){
+    public EventSubscription() {
         this.organisedEventsService = OrganisedEventsService.getInstance();
     }
 
-    public OrganisedEvent addToOrganisedEvent(Long chatId, String userName, Integer userId){
+    public void createOrganisedEvent(Long chatId, String eventName) {
+        organisedEventsService.createOrganisedEvent(chatId, eventName);
+    }
+
+    public OrganisedEvent addToOrganisedEvent(Long chatId, String userName, Integer userId) {
         return organisedEventsService.updateAndGetOrganisedEventMembers(chatId, userName, userId);
     }
 
