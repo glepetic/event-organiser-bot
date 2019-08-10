@@ -1,6 +1,5 @@
 package org.lepetic.telegrambot.entities;
 
-import org.bson.types.ObjectId;
 import org.lepetic.telegrambot.exceptions.MemberAlreadySubscribedException;
 import org.lepetic.telegrambot.exceptions.MemberIsNotSubscribedException;
 import org.mongodb.morphia.annotations.Id;
@@ -12,8 +11,6 @@ import java.util.stream.Collectors;
 public class OrganisedEvent {
 
     @Id
-    private ObjectId id;
-
     private Long chatId;
     private String eventName;
     private Set<GroupMember> groupMembers;
@@ -31,14 +28,6 @@ public class OrganisedEvent {
 
     public List<String> participants() {
         return this.groupMembers.stream().map(GroupMember::getName).collect(Collectors.toList());
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     public Long getChatId() {

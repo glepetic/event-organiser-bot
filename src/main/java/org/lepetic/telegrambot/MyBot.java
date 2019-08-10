@@ -52,7 +52,7 @@ public class MyBot extends AbilityBot {
     }
 
     public Ability addUserToEvent() {
-        return buildAbility("add", "adds you to the group's current event", GROUP, PUBLIC,
+        return buildAbility("join", "adds you to the group's current event", GROUP, PUBLIC,
                 ctx -> {
                     EventSubscription eventSubscription = new EventSubscription();
                     User user = ctx.user();

@@ -1,14 +1,11 @@
 package org.lepetic.telegrambot.services;
 
-import org.lepetic.telegrambot.entities.OrganisedEvent;
 import org.lepetic.telegrambot.entities.GroupMember;
-import org.lepetic.telegrambot.exceptions.NoEventRegisteredException;
+import org.lepetic.telegrambot.entities.OrganisedEvent;
 import org.lepetic.telegrambot.repositories.OrganisedEventsRepository;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

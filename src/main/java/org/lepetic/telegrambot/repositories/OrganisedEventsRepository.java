@@ -6,13 +6,15 @@ import org.lepetic.telegrambot.daos.OrganisedEventDAO;
 import org.lepetic.telegrambot.entities.GroupMember;
 import org.lepetic.telegrambot.entities.OrganisedEvent;
 import org.lepetic.telegrambot.exceptions.NoEventRegisteredException;
-import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.slf4j.Logger;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -28,7 +30,6 @@ public class OrganisedEventsRepository {
     private static OrganisedEventsRepository instance = new OrganisedEventsRepository();
 
     private Map<Long, OrganisedEvent> organisedEvents = new HashMap<>();
-    //    private Datastore organisedEventsDatastore;
     private OrganisedEventDAO organisedEventDAO;
 
     private OrganisedEventsRepository() {
@@ -40,8 +41,6 @@ public class OrganisedEventsRepository {
         MongoClient mongoClient = new MongoClient(new MongoClientURI(MONGO_URI));
 
         Morphia morphia = new Morphia();
-//        organisedEventsDatastore = morphia.createDatastore(mongoClient, DB_NAME);
-//        organisedEventsDatastore.ensureIndexes();
 
         organisedEventDAO = new OrganisedEventDAO(mongoClient, morphia, DB_NAME);
 
