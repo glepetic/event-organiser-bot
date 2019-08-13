@@ -15,6 +15,10 @@ public class EventSubscription {
         organisedEventsService.createOrganisedEvent(chatId, eventName);
     }
 
+    public void deleteOrganisedEvent(Long chatId) {
+        organisedEventsService.deleteOrganisedEvent(chatId);
+    }
+
     public OrganisedEvent addToOrganisedEvent(Long chatId, String userName, Integer userId) {
         return organisedEventsService.addAndGetOrganisedEventMembers(chatId, userName, userId);
     }
@@ -22,4 +26,5 @@ public class EventSubscription {
     public OrganisedEvent removeFromOrganisedEvent(Long chatId, String userName, Integer userId) {
         return organisedEventsService.removeAndGetOrganisedEvent(chatId, userName, userId);
     }
+
 }

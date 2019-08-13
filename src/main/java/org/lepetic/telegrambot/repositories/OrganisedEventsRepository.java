@@ -89,11 +89,20 @@ public class OrganisedEventsRepository {
             Optional<OrganisedEvent> optionalEvent = getOrganisedEventFromDB(organisedEvent.getChatId());
             if (!optionalEvent.isPresent()) {
                 organisedEventDAO.save(organisedEvent);
+                organisedEvents.put(organisedEvent.getChatId(), organisedEvent);
                 return;
             }
         }
         throw new EventAlreadyExistingException("There already exists an event for this group");
     }
+
+    public void deleteOrganisedEvent(Long chatId) {
+        OrganisedEvent organisedEvent = getOrganisedEvent(chatId);
+        LOGGER.info("Deleting event {}", chatId);
+        organisedEvents.remove(chatId);
+        organisedEventDAO.delete(organisedEvent);
+    }
+
 }
 
 

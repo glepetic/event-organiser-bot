@@ -104,4 +104,18 @@ public class MyBot extends AbilityBot {
                 });
     }
 
+    public Ability deleteEvent() {
+        return buildAbility("delete", "deletes an existing event", GROUP, ADMIN,
+                ctx -> {
+                    try {
+                        EventSubscription eventSubscription = new EventSubscription();
+                        eventSubscription.deleteOrganisedEvent(ctx.chatId());
+                        silent.send("El evento ha sido eliminado", ctx.chatId());
+                    } catch (NoEventRegisteredException e) {
+                        silent.send("No existe un evento en este grupo.",
+                                ctx.chatId());
+                    }
+                });
+    }
+
 }

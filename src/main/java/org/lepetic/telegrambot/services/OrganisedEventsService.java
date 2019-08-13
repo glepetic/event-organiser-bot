@@ -49,6 +49,10 @@ public class OrganisedEventsService {
         organisedEventsRepository.storeOrganisedEvent(organisedEvent);
     }
 
+    public void deleteOrganisedEvent(Long chatId) {
+        organisedEventsRepository.deleteOrganisedEvent(chatId);
+    }
+
     private OrganisedEvent getOrganisedEvent(Long chatId){
         LOGGER.info("Retrieving organised event of {}", chatId);
         return organisedEventsRepository.getOrganisedEvent(chatId);
