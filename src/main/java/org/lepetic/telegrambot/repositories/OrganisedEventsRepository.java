@@ -5,6 +5,7 @@ import com.mongodb.MongoClientURI;
 import org.lepetic.telegrambot.daos.OrganisedEventDAO;
 import org.lepetic.telegrambot.entities.GroupMember;
 import org.lepetic.telegrambot.entities.OrganisedEvent;
+import org.lepetic.telegrambot.exceptions.EventAlreadyExistingException;
 import org.lepetic.telegrambot.exceptions.NoEventRegisteredException;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
@@ -82,7 +83,16 @@ public class OrganisedEventsRepository {
     }
 
     public void storeOrganisedEvent(OrganisedEvent organisedEvent) {
-        organisedEventDAO.save(organisedEvent);
+        LOGGER.info("Verifying that the event does not already exist...");
+        OrganisedEvent organisedEventAux = organisedEvents.get(organisedEvent.getChatId());
+        if (organisedEventAux == null) {
+            Optional<OrganisedEvent> optionalEvent = getOrganisedEventFromDB(organisedEvent.getChatId());
+            if (!optionalEvent.isPresent()) {
+                organisedEventDAO.save(organisedEvent);
+                return;
+            }
+        }
+        throw new EventAlreadyExistingException("There already exists an event for this group");
     }
 }
 

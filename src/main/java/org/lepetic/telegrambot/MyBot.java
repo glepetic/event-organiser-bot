@@ -2,6 +2,7 @@ package org.lepetic.telegrambot;
 
 import org.lepetic.telegrambot.abilities.EventSubscription;
 import org.lepetic.telegrambot.entities.OrganisedEvent;
+import org.lepetic.telegrambot.exceptions.EventAlreadyExistingException;
 import org.lepetic.telegrambot.exceptions.MemberAlreadySubscribedException;
 import org.lepetic.telegrambot.exceptions.MemberIsNotSubscribedException;
 import org.lepetic.telegrambot.exceptions.NoEventRegisteredException;
@@ -96,6 +97,9 @@ public class MyBot extends AbilityBot {
                         silent.send("El evento ha sido creado", ctx.chatId());
                     } catch (IllegalStateException e) {
                         silent.send("El comando /event requiere el nombre del evento que se desea crear", ctx.chatId());
+                    } catch (EventAlreadyExistingException e) {
+                        silent.send("Ya existe un evento para este grupo. Puede modificarlo o eliminarlo si desea crear uno nuevo",
+                                ctx.chatId());
                     }
                 });
     }
