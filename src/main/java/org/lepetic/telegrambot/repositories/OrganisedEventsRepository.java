@@ -54,7 +54,7 @@ public class OrganisedEventsRepository {
 
     private Query<OrganisedEvent> queryOfOrganisedEventByChatId(Long chatId) {
         Query<OrganisedEvent> query = organisedEventDAO.createQuery();
-        query.filter("chatId ==", chatId);
+        query.filter("_id ==", chatId);
         return query;
     }
 

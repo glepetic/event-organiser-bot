@@ -9,7 +9,7 @@ public class MessageBuilder {
 
     private MessageBuilder() {}
 
-    public static String buildParticipantsMessage(String eventName, List<String> participants) {
+    public static String buildEventMessage(String eventName, List<String> participants) {
         String numeratedParticipants =
                 participants
                         .stream()

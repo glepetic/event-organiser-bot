@@ -24,6 +24,7 @@ public class OrganisedEvent {
     public void removeUser(GroupMember groupMember) {
         if(!groupMembers.contains(groupMember))
             throw new MemberIsNotSubscribedException("The user " + groupMember.getName() + " is not subscribed");
+        groupMembers.remove(groupMember);
     }
 
     public List<String> participants() {

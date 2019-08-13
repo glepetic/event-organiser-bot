@@ -25,12 +25,19 @@ public class OrganisedEventsService {
         return instance;
     }
 
-    public OrganisedEvent updateAndGetOrganisedEventMembers(Long chatId, String userName, Integer userId){
-        LOGGER.info("Retrieving organised event of {}", chatId);
-        OrganisedEvent organisedEvent = organisedEventsRepository.getOrganisedEvent(chatId);
+    public OrganisedEvent addAndGetOrganisedEventMembers(Long chatId, String userName, Integer userId){
+        OrganisedEvent organisedEvent = getOrganisedEvent(chatId);
         organisedEvent.addUser(new GroupMember(userId, userName));
         LOGGER.info("Updating event with new member: {}", userName);
-        organisedEventsRepository.updateOrganisedEvent(chatId, organisedEvent.getGroupMembers());
+        updateOrganisedEventMembers(organisedEvent, chatId);
+        return organisedEvent;
+    }
+
+    public OrganisedEvent removeAndGetOrganisedEvent(Long chatId, String userName, Integer userId) {
+        OrganisedEvent organisedEvent = getOrganisedEvent(chatId);
+        organisedEvent.removeUser(new GroupMember(userId, userName));
+        LOGGER.info("Updating having removed member: {}", userName);
+        updateOrganisedEventMembers(organisedEvent, chatId);
         return organisedEvent;
     }
 
@@ -40,6 +47,15 @@ public class OrganisedEventsService {
         organisedEvent.setEventName(eventName);
         organisedEvent.setGroupMembers(new HashSet<>());
         organisedEventsRepository.storeOrganisedEvent(organisedEvent);
+    }
+
+    private OrganisedEvent getOrganisedEvent(Long chatId){
+        LOGGER.info("Retrieving organised event of {}", chatId);
+        return organisedEventsRepository.getOrganisedEvent(chatId);
+    }
+
+    private void updateOrganisedEventMembers(OrganisedEvent organisedEvent, Long chatId){
+        organisedEventsRepository.updateOrganisedEvent(chatId, organisedEvent.getGroupMembers());
     }
 
 }
