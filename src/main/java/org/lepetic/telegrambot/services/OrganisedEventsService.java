@@ -41,10 +41,12 @@ public class OrganisedEventsService {
         return organisedEvent;
     }
 
-    public void createOrganisedEvent(Long chatId, String eventName) {
+    public void createOrganisedEvent(Long chatId, String date, String time, String[] eventName) {
         OrganisedEvent organisedEvent = new OrganisedEvent();
         organisedEvent.setChatId(chatId);
-        organisedEvent.setEventName(eventName);
+        organisedEvent.setEventName(String.join(" ", eventName));
+        organisedEvent.setDate(date);
+        organisedEvent.setTime(time);
         organisedEvent.setGroupMembers(new HashSet<>());
         organisedEventsRepository.storeOrganisedEvent(organisedEvent);
     }

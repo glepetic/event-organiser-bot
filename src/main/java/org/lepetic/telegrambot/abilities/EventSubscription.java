@@ -11,8 +11,8 @@ public class EventSubscription {
         this.organisedEventsService = OrganisedEventsService.getInstance();
     }
 
-    public void createOrganisedEvent(Long chatId, String eventName) {
-        organisedEventsService.createOrganisedEvent(chatId, eventName);
+    public void createOrganisedEvent(Long chatId, String date, String time, String[] eventName) {
+        organisedEventsService.createOrganisedEvent(chatId, date, time, eventName);
     }
 
     public void deleteOrganisedEvent(Long chatId) {

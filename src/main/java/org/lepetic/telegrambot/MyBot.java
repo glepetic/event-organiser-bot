@@ -10,11 +10,13 @@ import org.lepetic.telegrambot.utils.MessageBuilder;
 import org.lepetic.telegrambot.utils.TelegramUtils;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
+import org.telegram.abilitybots.api.objects.Ability.AbilityBuilder;
 import org.telegram.abilitybots.api.objects.Locality;
 import org.telegram.abilitybots.api.objects.MessageContext;
 import org.telegram.abilitybots.api.objects.Privacy;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 import static org.telegram.abilitybots.api.objects.Locality.GROUP;
@@ -35,16 +37,19 @@ public class MyBot extends AbilityBot {
         return CREATOR_ID;
     }
 
-    private Ability buildAbility(String abilityName, String abilityDescription, Locality locality, Privacy privacy,
-                                 Consumer<MessageContext> consumer) {
+    private AbilityBuilder basicAbility(String abilityName, String abilityDescription, Locality locality,
+                                        Privacy privacy){
         return Ability
                 .builder()
                 .name(abilityName)
                 .info(abilityDescription)
                 .locality(locality)
-                .privacy(privacy)
-                .action(consumer)
-                .build();
+                .privacy(privacy);
+    }
+
+    private Ability buildAbility(String abilityName, String abilityDescription, Locality locality,
+                                 Privacy privacy, Consumer<MessageContext> consumer) {
+        return basicAbility(abilityName, abilityDescription, locality, privacy).action(consumer).build();
     }
 
     public Ability addUserToEvent() {
@@ -56,7 +61,7 @@ public class MyBot extends AbilityBot {
                     OrganisedEvent organisedEvent;
                     try {
                         organisedEvent = eventSubscription.addToOrganisedEvent(ctx.chatId(), nickname, user.getId());
-                        String message = MessageBuilder.buildEventMessage(organisedEvent.getEventName(), organisedEvent.participants());
+                        String message = MessageBuilder.buildEventMessage(organisedEvent);
                         silent.send(message, ctx.chatId());
                     } catch (NoEventRegisteredException e) {
                         silent.send("No hay evento actual para este grupo. Si sos admin, crealo con /event",
@@ -76,7 +81,7 @@ public class MyBot extends AbilityBot {
                     OrganisedEvent organisedEvent;
                     try {
                         organisedEvent = eventSubscription.removeFromOrganisedEvent(ctx.chatId(), nickname, user.getId());
-                        String message = MessageBuilder.buildEventMessage(organisedEvent.getEventName(), organisedEvent.participants());
+                        String message = MessageBuilder.buildEventMessage(organisedEvent);
                         silent.send(message, ctx.chatId());
                     } catch (NoEventRegisteredException e) {
                         silent.send("No hay evento actual para este grupo. Si sos admin, crealo con /event",
@@ -93,7 +98,8 @@ public class MyBot extends AbilityBot {
                 ctx -> {
                     try {
                         EventSubscription eventSubscription = new EventSubscription();
-                        eventSubscription.createOrganisedEvent(ctx.chatId(), ctx.firstArg());
+                        eventSubscription.createOrganisedEvent(ctx.chatId(), ctx.firstArg(), ctx.secondArg(),
+                                Arrays.copyOfRange(ctx.arguments(), 2, ctx.arguments().length));
                         silent.send("El evento ha sido creado", ctx.chatId());
                     } catch (IllegalStateException e) {
                         silent.send("El comando /event requiere el nombre del evento que se desea crear", ctx.chatId());
