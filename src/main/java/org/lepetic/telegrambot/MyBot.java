@@ -2,10 +2,14 @@ package org.lepetic.telegrambot;
 
 import org.lepetic.telegrambot.abilities.EventSubscription;
 import org.lepetic.telegrambot.entities.OrganisedEvent;
-import org.lepetic.telegrambot.exceptions.EventAlreadyExistingException;
-import org.lepetic.telegrambot.exceptions.MemberAlreadySubscribedException;
-import org.lepetic.telegrambot.exceptions.MemberIsNotSubscribedException;
-import org.lepetic.telegrambot.exceptions.NoEventRegisteredException;
+import org.lepetic.telegrambot.exceptions.arguments.InvalidArgumentCountException;
+import org.lepetic.telegrambot.exceptions.dateTime.ScheduleInThePastException;
+import org.lepetic.telegrambot.exceptions.events.EventAlreadyExistingException;
+import org.lepetic.telegrambot.exceptions.events.MemberAlreadySubscribedException;
+import org.lepetic.telegrambot.exceptions.events.MemberIsNotSubscribedException;
+import org.lepetic.telegrambot.exceptions.events.NoEventRegisteredException;
+import org.lepetic.telegrambot.exceptions.format.InvalidFormatException;
+import org.lepetic.telegrambot.utils.ArgumentsValidator;
 import org.lepetic.telegrambot.utils.MessageBuilder;
 import org.lepetic.telegrambot.utils.TelegramUtils;
 import org.telegram.abilitybots.api.bot.AbilityBot;
@@ -97,12 +101,18 @@ public class MyBot extends AbilityBot {
         return buildAbility("event", "creates a new event", GROUP, ADMIN,
                 ctx -> {
                     try {
+                        ArgumentsValidator.validateNewEvent(ctx.arguments());
                         EventSubscription eventSubscription = new EventSubscription();
                         eventSubscription.createOrganisedEvent(ctx.chatId(), ctx.firstArg(), ctx.secondArg(),
                                 Arrays.copyOfRange(ctx.arguments(), 2, ctx.arguments().length));
                         silent.send("El evento ha sido creado", ctx.chatId());
-                    } catch (IllegalStateException e) {
-                        silent.send("El comando /event requiere el nombre del evento que se desea crear", ctx.chatId());
+                    } catch (InvalidArgumentCountException e) {
+                        silent.send("Los argumentos minimos son 3: /event <dia> <hora> <nombre>",
+                                ctx.chatId());
+                    } catch (InvalidFormatException e) {
+                        silent.send("Recuerde respetar los formatos dd/MM/yyyy y hh:mm.", ctx.chatId());
+                    } catch (ScheduleInThePastException e) {
+                        silent.send("Los eventos no se pueden crear en el pasado", ctx.chatId());
                     } catch (EventAlreadyExistingException e) {
                         silent.send("Ya existe un evento para este grupo. Puede modificarlo o eliminarlo si desea crear uno nuevo",
                                 ctx.chatId());

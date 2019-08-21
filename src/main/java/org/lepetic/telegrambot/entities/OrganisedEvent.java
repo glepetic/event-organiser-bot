@@ -1,7 +1,7 @@
 package org.lepetic.telegrambot.entities;
 
-import org.lepetic.telegrambot.exceptions.MemberAlreadySubscribedException;
-import org.lepetic.telegrambot.exceptions.MemberIsNotSubscribedException;
+import org.lepetic.telegrambot.exceptions.events.MemberAlreadySubscribedException;
+import org.lepetic.telegrambot.exceptions.events.MemberIsNotSubscribedException;
 import org.mongodb.morphia.annotations.Id;
 
 import java.util.HashSet;
