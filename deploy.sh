@@ -17,6 +17,10 @@ done
 
 echo 'Changing to master branch'
 git checkout master
+git pull origin dev
+git add .
+git commit -m "Prepare for release $1"
+git push origin master
 echo 'Starting deploy...'
 mvn clean versions:set heroku:deploy -DnewVersion="$1"
 if [ $? -ne 0 ]; then
