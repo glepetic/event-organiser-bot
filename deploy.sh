@@ -15,6 +15,13 @@ while :; do
   fi
 done
 
+echo "Checking for existing version tag locally..."
+local=$(git tag | grep "$1")
+[ -n "$local" ] && echo "Tag version exists locally" && exit 1
+echo "Checking for existing version tag remotely..."
+remote=$(git ls-remote --tags | grep "refs/tags/$1")
+[ -n "$remote" ] && echo "Tag version exists remotely" && exit 1
+
 echo 'Changing to master branch'
 git checkout master
 git pull origin dev
