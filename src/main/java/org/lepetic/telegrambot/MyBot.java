@@ -1,5 +1,6 @@
 package org.lepetic.telegrambot;
 
+import org.lepetic.telegrambot.abilities.EventModification;
 import org.lepetic.telegrambot.abilities.EventSubscription;
 import org.lepetic.telegrambot.entities.OrganisedEvent;
 import org.lepetic.telegrambot.exceptions.arguments.InvalidArgumentCountException;
@@ -131,6 +132,15 @@ public class MyBot extends AbilityBot {
                         silent.send("No existe un evento en este grupo.",
                                 ctx.chatId());
                     }
+                });
+    }
+
+    public Ability changeDate() {
+        return buildAbility("eventDate", "changes the date of the event", GROUP, ADMIN,
+                ctx -> {
+                    ArgumentsValidator.validateNewEvent(ctx.arguments());
+                    EventModification eventModification = new EventModification();
+                    eventModification.changeDate(ctx.chatId(), ctx.firstArg());
                 });
     }
 

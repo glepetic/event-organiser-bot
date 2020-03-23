@@ -15,6 +15,8 @@ while :; do
   fi
 done
 
+}
+
 echo "Checking for existing version tag locally..."
 local=$(git tag | grep "$1")
 [ -n "$local" ] && echo "Tag version exists locally" && exit 1
@@ -33,6 +35,8 @@ mvn clean versions:set heroku:deploy -DnewVersion="$1"
 if [ $? -ne 0 ]; then
   echo 'Reverting to previous version'
   mvn versions:revert
+  git reset --hard HEAD~1
+  git push origin -f
 else
   mvn versions:commit
   echo 'Tagging release'

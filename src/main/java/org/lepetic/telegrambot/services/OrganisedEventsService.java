@@ -64,4 +64,8 @@ public class OrganisedEventsService {
         organisedEventsRepository.updateOrganisedEvent(chatId, organisedEvent.getGroupMembers());
     }
 
+    public void changeDate(Long evtId, String date) {
+        OrganisedEvent organisedEvent = organisedEventsRepository.getOrganisedEvent(evtId);
+        organisedEvent.setDate(date);
+    }
 }

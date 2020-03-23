@@ -4,6 +4,9 @@ import org.lepetic.telegrambot.configuration.BootUtils;
 import org.slf4j.Logger;
 import org.telegram.telegrambots.ApiContextInitializer;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class BotApp {
